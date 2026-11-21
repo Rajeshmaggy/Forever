@@ -192,11 +192,11 @@
       <span>Private Journal</span>
     </div>
     <div class="flex items-center gap-2">
-      <!-- Personal author button -->
-      <button id="author-note-btn" type="button"
+      <!-- Personal private button -->
+      <button id="personal-vault-btn" type="button"
         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#7a7064] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
         <span>✦</span>
-        <span>Author's Note</span>
+        <span>Keep Safe</span>
       </button>
       <button id="lock-now-btn" type="button"
         class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#686056] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
@@ -273,11 +273,11 @@
     </article>
   </main>
 
-  <!-- Private Author Modal -->
+  <!-- Private Personal Logs Modal -->
   <div id="stats-modal" class="hidden fixed inset-0 z-50 bg-[#2b2723]/45 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-[#fbf8f3] border border-[#4a4137]/20 rounded-3xl p-6 shadow-2xl">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#4a4137]/12">
-        <span class="font-diary text-lg text-[#2b2723]">Private Diary Logs</span>
+        <span class="font-diary text-lg text-[#2b2723]">Keep Safe — Logs</span>
         <button id="close-stats-btn" type="button" class="text-xs px-2.5 py-1 rounded-lg bg-[#efe7da] text-[#4a4137] hover:bg-[#e5dac8] cursor-pointer">
           Close
         </button>
@@ -285,7 +285,7 @@
 
       <!-- PIN Gate -->
       <div id="pin-screen">
-        <p class="text-xs text-[#686056] mb-3">Enter personal passcode to view logs:</p>
+        <p class="text-xs text-[#686056] mb-3">Enter passcode:</p>
         <div class="flex gap-2">
           <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"
             class="w-full px-3.5 py-2 rounded-xl bg-white border border-[#4a4137]/20 text-sm tracking-widest focus:outline-none focus:border-[#8c6b52]" />
@@ -338,8 +338,7 @@
 
   <script>
     (function () {
-      // 1. PASTE YOUR JSONBLOB ID BELOW (from jsonblob.com)
-      const BLOB_ID = '01a1fd52-636a-7c81-8572-b0c758036884';
+      const API_URL = 'https://api.npoint.io/808b96e14af537aaba1f';
       const AUTHOR_PIN = '183276';
 
       const HOTSPOT = { x: 0.56, y: 0.61, r: 0.05 };
@@ -362,7 +361,7 @@
       const slideB = document.getElementById('wm-slide-b');
 
       // Modal elements
-      const authorNoteBtn = document.getElementById('author-note-btn');
+      const personalVaultBtn = document.getElementById('personal-vault-btn');
       const statsModal = document.getElementById('stats-modal');
       const closeStatsBtn = document.getElementById('close-stats-btn');
       const pinScreen = document.getElementById('pin-screen');
@@ -381,7 +380,7 @@
       let usingA = true;
       let timer = null;
 
-      // Get formatted IST Timestamp
+      // Formatted IST Timestamp
       function getISTTimestamp() {
         return new Date().toLocaleString('en-IN', {
           timeZone: 'Asia/Kolkata',
@@ -395,15 +394,9 @@
         }) + ' IST';
       }
 
-      // Cloud Storage Helpers
       async function fetchLogs() {
-        if (!BLOB_ID || BLOB_ID === 'PASTE_YOUR_BLOB_ID_HERE') {
-          return JSON.parse(localStorage.getItem('diary_fallback_logs') || '{"views":[],"unlocks":[]}');
-        }
         try {
-          const res = await fetch('https://jsonblob.com/api/jsonBlob/' + BLOB_ID, {
-            headers: { 'Accept': 'application/json' }
-          });
+          const res = await fetch(API_URL + '?t=' + Date.now());
           if (!res.ok) throw new Error('Fetch failed');
           const data = await res.json();
           return {
@@ -423,18 +416,13 @@
 
         localStorage.setItem('diary_fallback_logs', JSON.stringify(data));
 
-        if (BLOB_ID && BLOB_ID !== 'PASTE_YOUR_BLOB_ID_HERE') {
-          try {
-            await fetch('https://jsonblob.com/api/jsonBlob/' + BLOB_ID, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              body: JSON.stringify(data)
-            });
-          } catch (e) {}
-        }
+        try {
+          await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } catch (e) {}
       }
 
       async function renderLogs() {
@@ -454,14 +442,14 @@
           : '<li class="italic text-[#8c8276]">Not unlocked yet.</li>';
       }
 
-      // Record page view on load (only once per tab session)
+      // Record page view once per tab session
       if (!sessionStorage.getItem('diary_viewed_session')) {
         sessionStorage.setItem('diary_viewed_session', '1');
         recordEvent('view');
       }
 
-      // Author Modal Events
-      authorNoteBtn.addEventListener('click', () => {
+      // Personal Modal Events
+      personalVaultBtn.addEventListener('click', () => {
         pinInput.value = '';
         pinError.classList.add('hidden');
         pinScreen.classList.remove('hidden');
@@ -495,13 +483,13 @@
       clearLogsBtn.addEventListener('click', async () => {
         const emptyData = { views: [], unlocks: [] };
         localStorage.setItem('diary_fallback_logs', JSON.stringify(emptyData));
-        if (BLOB_ID && BLOB_ID !== 'PASTE_YOUR_BLOB_ID_HERE') {
-          await fetch('https://jsonblob.com/api/jsonBlob/' + BLOB_ID, {
-            method: 'PUT',
+        try {
+          await fetch(API_URL, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(emptyData)
           });
-        }
+        } catch (e) {}
         renderLogs();
       });
 
@@ -561,7 +549,6 @@
       }
 
       function unlockLetter() {
-        // Record unlock event with IST timestamp
         recordEvent('unlock');
 
         unlockError.classList.add('hidden');
