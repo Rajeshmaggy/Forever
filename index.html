@@ -109,27 +109,66 @@
       position: relative;
       z-index: 5;
       margin-top: 2.5rem;
-      padding: 1.25rem 1rem 1.5rem;
+      padding: 1.5rem 1rem 1.65rem;
       text-align: center;
       background: #fbf8f3;
       border-radius: 1.35rem;
       border: 1px solid rgba(74, 65, 55, 0.16);
       box-shadow: 0 10px 28px -14px rgba(43, 39, 35, 0.18);
     }
+    .closing-photo-wrap {
+      position: relative;
+      max-width: 460px;
+      margin: 0 auto;
+    }
     .closing-photo img {
       display: block;
       width: 100%;
-      max-width: 460px;
       height: auto;
       min-height: 220px;
-      margin: 0 auto;
       object-fit: cover;
       border-radius: 1rem;
       border: 1px solid rgba(74, 65, 55, 0.12);
       background: #efe7da;
     }
+
+    /* Natural warm speech bubble */
+    .photo-speech-bubble {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.85rem;
+      padding: 0.6rem 1.05rem;
+      background: #fffdf9;
+      color: #2b2723;
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      border-radius: 1.15rem;
+      border: 1px solid rgba(74, 65, 55, 0.18);
+      box-shadow: 0 8px 20px -8px rgba(43, 39, 35, 0.16);
+      animation: floatGentle 4.5s ease-in-out infinite;
+    }
+    .photo-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px;
+      height: 12px;
+      background: #fffdf9;
+      border-right: 1px solid rgba(74, 65, 55, 0.18);
+      border-bottom: 1px solid rgba(74, 65, 55, 0.18);
+    }
+
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
     .closing-caption {
-      margin: 1.1rem 0 0;
+      margin: 1.15rem 0 0;
       font-family: 'Newsreader', Georgia, serif;
       font-style: italic;
       font-size: 1.25rem;
@@ -177,9 +216,9 @@
       50% { opacity: 0.95; }
     }
 
-    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-thumb {
-      background: rgba(122, 92, 71, 0.25);
+      background: rgba(122, 92, 71, 0.35);
       border-radius: 9999px;
     }
   </style>
@@ -192,7 +231,6 @@
       <span>Private Journal</span>
     </div>
     <div class="flex items-center gap-2">
-      <!-- Personal private button -->
       <button id="personal-vault-btn" type="button"
         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#7a7064] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
         <span>✦</span>
@@ -254,7 +292,7 @@
               When you said you feel uncomfortable with me, and when you said I only had lust on you, avan kooda dhaan ivlo naal paduthen nu sonne, that hurt me more than anything else I am going through. 💔 Even if I had physical feelings, that was only for you and never with anyone else—not gonna happen with anyone else. You are my first and you are my last, and the moment you said you feel uncomfortable, I let go of even wanting that. Honestly, I even thought of asking to meet you one last time, just to see you, but after everything you said I realized that won't feel comfortable for you.
             </p>
             <p>
-              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily? And you know one thing, I feel like I told you already, one day you will start hating me—that happened lol.
+              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily? And you know one thing, I'm working in IT—enaku tatkal book panna theriyadha? I wanted to talk to you, adhuku dhaan apdi vandhen. Inimey apdi kooda varamaaten. I feel like I told you already, one day you will start hating me—that happened lol.
             </p>
             <p>
               I am not bad person, na romba mosamaanavan la illa. I just wanted to drop my ego one last time and tell you what you mean to me. If there is a next life, I wish I will reach you soon and take you soon—I want to spend my entire life with you. Take care of yourself, and as I used to say always, don't trust anyone—I know you are brave, but think before taking any decision. Have a fresh, happy year ahead. I am not sending this to disturb you or ruin your peace. Thanks for everything you gave me and every memory. I am vacating Hyderabad completely and permanently changing my location to rebuild myself and find the parts of myself I lost.
@@ -263,8 +301,14 @@
         </div>
       </div>
 
+      <!-- Closing photo with natural speech bubble -->
       <div class="closing-photo mt-6">
-        <img src="bg8.jpg" alt="" />
+        <div class="photo-speech-bubble">
+          “Sorry, na edhum venumnu panla...”
+        </div>
+        <div class="closing-photo-wrap">
+          <img src="bg8.jpg" alt="" />
+        </div>
         <p class="closing-caption">
           You’re loved unconditionally<br />
           and missed unconditionally Taataa Muu!
@@ -275,9 +319,9 @@
 
   <!-- Private Personal Logs Modal -->
   <div id="stats-modal" class="hidden fixed inset-0 z-50 bg-[#2b2723]/45 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fbf8f3] border border-[#4a4137]/20 rounded-3xl p-6 shadow-2xl">
+    <div class="w-full max-w-md max-h-[88vh] overflow-y-auto bg-[#fbf8f3] border border-[#4a4137]/20 rounded-3xl p-6 shadow-2xl">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#4a4137]/12">
-        <span class="font-diary text-lg text-[#2b2723]">Keep Safe — Logs</span>
+        <span class="font-diary text-lg text-[#2b2723]">Keep Safe — All Logs</span>
         <button id="close-stats-btn" type="button" class="text-xs px-2.5 py-1 rounded-lg bg-[#efe7da] text-[#4a4137] hover:bg-[#e5dac8] cursor-pointer">
           Close
         </button>
@@ -301,26 +345,26 @@
       <div id="logs-screen" class="hidden space-y-4">
         <div class="grid grid-cols-2 gap-3">
           <div class="p-3.5 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
-            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Page Views</div>
+            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Total Page Views</div>
             <div id="total-views-count" class="font-diary text-2xl text-[#2b2723] mt-0.5">0</div>
           </div>
           <div class="p-3.5 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
-            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Letter Unlocked</div>
+            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Total Unlocks</div>
             <div id="total-unlocks-count" class="font-diary text-2xl text-[#2b2723] mt-0.5">0</div>
           </div>
         </div>
 
         <div>
-          <div class="text-xs font-medium text-[#4a4137] mb-1.5">Page View Timestamps (IST)</div>
-          <ul id="views-list" class="max-h-32 overflow-y-auto text-xs text-[#686056] bg-white/80 rounded-xl p-3 border border-[#4a4137]/10 space-y-1.5">
-            <li>Loading...</li>
+          <div class="text-xs font-medium text-[#4a4137] mb-1.5">All Page Views (IST)</div>
+          <ul id="views-list" class="max-h-48 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
+            <li class="py-1">Loading...</li>
           </ul>
         </div>
 
         <div>
-          <div class="text-xs font-medium text-[#4a4137] mb-1.5">Unlock Timestamps (IST)</div>
-          <ul id="unlocks-list" class="max-h-32 overflow-y-auto text-xs text-[#686056] bg-white/80 rounded-xl p-3 border border-[#4a4137]/10 space-y-1.5">
-            <li>Loading...</li>
+          <div class="text-xs font-medium text-[#4a4137] mb-1.5">All Letter Unlocks (IST)</div>
+          <ul id="unlocks-list" class="max-h-48 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
+            <li class="py-1">Loading...</li>
           </ul>
         </div>
 
@@ -329,7 +373,7 @@
             Refresh Logs
           </button>
           <button id="clear-logs-btn" type="button" class="text-xs text-[#9e473b] hover:underline cursor-pointer">
-            Reset / Clear Logs
+            Reset / Clear All Logs
           </button>
         </div>
       </div>
@@ -360,7 +404,6 @@
       const slideA = document.getElementById('wm-slide-a');
       const slideB = document.getElementById('wm-slide-b');
 
-      // Modal elements
       const personalVaultBtn = document.getElementById('personal-vault-btn');
       const statsModal = document.getElementById('stats-modal');
       const closeStatsBtn = document.getElementById('close-stats-btn');
@@ -379,8 +422,8 @@
       let slideIndex = 0;
       let usingA = true;
       let timer = null;
+      let writeQueue = Promise.resolve();
 
-      // Formatted IST Timestamp
       function getISTTimestamp() {
         return new Date().toLocaleString('en-IN', {
           timeZone: 'Asia/Kolkata',
@@ -408,47 +451,49 @@
         }
       }
 
-      async function recordEvent(type) {
+      function recordEvent(type) {
         const stamp = getISTTimestamp();
-        const data = await fetchLogs();
-        if (type === 'view') data.views.push(stamp);
-        if (type === 'unlock') data.unlocks.push(stamp);
+        writeQueue = writeQueue.then(async () => {
+          const data = await fetchLogs();
+          if (type === 'view') data.views.push(stamp);
+          if (type === 'unlock') data.unlocks.push(stamp);
 
-        localStorage.setItem('diary_fallback_logs', JSON.stringify(data));
+          localStorage.setItem('diary_fallback_logs', JSON.stringify(data));
 
-        try {
-          await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-        } catch (e) {}
+          try {
+            await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+          } catch (e) {}
+        });
+        return writeQueue;
       }
 
       async function renderLogs() {
-        viewsList.innerHTML = '<li>Loading...</li>';
-        unlocksList.innerHTML = '<li>Loading...</li>';
+        viewsList.innerHTML = '<li class="py-1">Loading...</li>';
+        unlocksList.innerHTML = '<li class="py-1">Loading...</li>';
+        await writeQueue;
         const data = await fetchLogs();
 
         totalViewsCount.textContent = data.views.length;
         totalUnlocksCount.textContent = data.unlocks.length;
 
         viewsList.innerHTML = data.views.length
-          ? data.views.slice().reverse().map((t, i) => `<li>#${data.views.length - i} — ${t}</li>`).join('')
-          : '<li class="italic text-[#8c8276]">No page views yet.</li>';
+          ? data.views.slice().reverse().map((t, i) => `<li class="py-1.5">#${data.views.length - i} — ${t}</li>`).join('')
+          : '<li class="py-1 italic text-[#8c8276]">No page views yet.</li>';
 
         unlocksList.innerHTML = data.unlocks.length
-          ? data.unlocks.slice().reverse().map((t, i) => `<li>#${data.unlocks.length - i} — ${t}</li>`).join('')
-          : '<li class="italic text-[#8c8276]">Not unlocked yet.</li>';
+          ? data.unlocks.slice().reverse().map((t, i) => `<li class="py-1.5">#${data.unlocks.length - i} — ${t}</li>`).join('')
+          : '<li class="py-1 italic text-[#8c8276]">Not unlocked yet.</li>';
       }
 
-      // Record page view once per tab session
       if (!sessionStorage.getItem('diary_viewed_session')) {
         sessionStorage.setItem('diary_viewed_session', '1');
         recordEvent('view');
       }
 
-      // Personal Modal Events
       personalVaultBtn.addEventListener('click', () => {
         pinInput.value = '';
         pinError.classList.add('hidden');
@@ -480,16 +525,18 @@
 
       refreshLogsBtn.addEventListener('click', renderLogs);
 
-      clearLogsBtn.addEventListener('click', async () => {
-        const emptyData = { views: [], unlocks: [] };
-        localStorage.setItem('diary_fallback_logs', JSON.stringify(emptyData));
-        try {
-          await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(emptyData)
-          });
-        } catch (e) {}
+      clearLogsBtn.addEventListener('click', () => {
+        writeQueue = writeQueue.then(async () => {
+          const emptyData = { views: [], unlocks: [] };
+          localStorage.setItem('diary_fallback_logs', JSON.stringify(emptyData));
+          try {
+            await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(emptyData)
+            });
+          } catch (e) {}
+        });
         renderLogs();
       });
 
