@@ -542,18 +542,39 @@
         emailCooldown = true;
         setTimeout(() => { emailCooldown = false; }, 15000);
 
-        fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            _subject: 'Need Me Alert ❤️ — Cheek Clicked',
-            message: 'She clicked on the cheek ("Need meee").',
-            time_ist: stamp
-          })
-        }).catch(() => {});
+        let iframe = document.getElementById('hidden-mail-frame');
+        if (!iframe) {
+          iframe = document.createElement('iframe');
+          iframe.id = 'hidden-mail-frame';
+          iframe.name = 'hidden-mail-frame';
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://formsubmit.co/' + encodeURIComponent(NOTIFY_EMAIL);
+        form.target = 'hidden-mail-frame';
+        form.style.display = 'none';
+
+        const fields = {
+          _subject: 'Need Me Alert ❤️ — Cheek Clicked',
+          _captcha: 'false',
+          message: 'She clicked on the cheek ("Need meee").',
+          time_ist: stamp
+        };
+
+        for (const [key, val] of Object.entries(fields)) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = val;
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+        setTimeout(() => form.remove(), 3000);
       }
 
       async function renderLogs() {
@@ -585,7 +606,6 @@
         recordEvent('view');
       }
 
-      // Silent Cheek Click Event (Logs + Sends Email, zero UI text shown)
       cheekNeedBtn.addEventListener('click', () => {
         const stamp = getISTTimestamp();
         recordEvent('needme');
