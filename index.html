@@ -11,7 +11,7 @@
 
   <style>
     :root {
-      --bg-base: #f5f1ea;
+      --bg-base: #16131f;
       --text-primary: #2b2723;
       --wm-opacity: 0.46;
     }
@@ -19,14 +19,24 @@
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background:
-        radial-gradient(circle at 18% 12%, rgba(226, 213, 193, 0.45) 0%, transparent 52%),
-        radial-gradient(circle at 85% 88%, rgba(213, 200, 182, 0.4) 0%, transparent 55%),
-        var(--bg-base);
+        radial-gradient(ellipse at 20% 15%, rgba(120, 86, 138, 0.42) 0%, transparent 50%),
+        radial-gradient(ellipse at 82% 20%, rgba(196, 142, 114, 0.35) 0%, transparent 48%),
+        radial-gradient(ellipse at 50% 88%, rgba(72, 62, 108, 0.5) 0%, transparent 60%),
+        linear-gradient(160deg, #16131f 0%, #231c2e 48%, #191522 100%);
       color: var(--text-primary);
       margin: 0;
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+    }
+
+    #starfield {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .font-diary { font-family: 'Newsreader', Georgia, serif; }
@@ -60,8 +70,8 @@
       position: relative;
       overflow: hidden;
       background: #fbf8f3;
-      border: 1px solid rgba(74, 65, 55, 0.15);
-      box-shadow: 0 16px 48px -18px rgba(43, 39, 35, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.45);
     }
 
     #paper-memories {
@@ -113,8 +123,8 @@
       text-align: center;
       background: #fbf8f3;
       border-radius: 1.35rem;
-      border: 1px solid rgba(74, 65, 55, 0.16);
-      box-shadow: 0 10px 28px -14px rgba(43, 39, 35, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 20px 50px -14px rgba(0, 0, 0, 0.4);
     }
     .closing-photo-wrap {
       position: relative;
@@ -224,8 +234,9 @@
       position: relative;
       border-radius: 1.25rem;
       overflow: hidden;
-      border: 1px solid rgba(74, 65, 55, 0.18);
-      background: #efe7da;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.45);
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
@@ -241,7 +252,7 @@
 
     .hotspot-hint {
       position: absolute;
-      border: 2px dashed rgba(122, 92, 71, 0.85);
+      border: 2px dashed rgba(255, 248, 235, 0.85);
       border-radius: 9999px;
       pointer-events: none;
       display: none;
@@ -251,7 +262,7 @@
       width: 6px;
       height: 6px;
       border-radius: 9999px;
-      background: #8c6b52;
+      background: #e6c79c;
       animation: softPulse 5s ease-in-out infinite;
     }
     @keyframes softPulse {
@@ -268,19 +279,22 @@
 </head>
 <body class="selection:bg-[#e6d8c5] selection:text-[#2b2723]">
 
+  <!-- Live Animated Starfield Background -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
   <header class="relative z-20 w-full max-w-4xl mx-auto px-5 pt-5 pb-2 flex items-center justify-between">
-    <div class="flex items-center gap-2 text-xs tracking-wide uppercase text-[#7a7064]">
+    <div class="flex items-center gap-2 text-xs tracking-wide uppercase text-[#e6dccf]/85">
       <span class="memory-dot-pulse"></span>
       <span>Private Journal</span>
     </div>
     <div class="flex items-center gap-2">
       <button id="personal-vault-btn" type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#7a7064] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#fbf8f3] hover:bg-white/20 bg-white/10 backdrop-blur-md border border-white/20 transition cursor-pointer">
         <span>✦</span>
         <span>Keep Safe</span>
       </button>
       <button id="lock-now-btn" type="button"
-        class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#686056] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
+        class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#fbf8f3] hover:bg-white/20 bg-white/10 backdrop-blur-md border border-white/20 transition cursor-pointer">
         Lock
       </button>
     </div>
@@ -288,12 +302,13 @@
 
   <main class="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6 pt-4 pb-20">
 
+    <!-- Frosted Glass Password Gate floating in the Galaxy -->
     <section id="password-gate" class="fade-view fade-visible min-h-[74vh] flex items-center justify-center">
-      <div class="w-full max-w-md bg-[#fbf8f3]/95 border border-[#4a4137]/15 rounded-3xl p-6 sm:p-8 shadow-[0_14px_40px_-15px_rgba(43,39,35,0.12)]">
-        <p class="text-sm text-[#686056] mb-2 leading-relaxed">
+      <div class="w-full max-w-md bg-white/[0.08] backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.55),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+        <p class="text-sm font-medium text-[#fbf8f3]/95 mb-1.5 leading-relaxed drop-shadow-xs">
           Click on the password.
         </p>
-        <p class="text-sm text-[#8c8276] mb-5 leading-relaxed">
+        <p class="text-sm text-[#e6dccf]/80 mb-5 leading-relaxed">
           You know where to click.
         </p>
 
@@ -302,7 +317,7 @@
           <div id="hotspot-hint" class="hotspot-hint"></div>
         </div>
 
-        <p id="unlock-error" class="hidden mt-3 text-xs text-[#9e473b]" role="alert">
+        <p id="unlock-error" class="hidden mt-3 text-xs text-[#ffb4a9]" role="alert">
           Not there… try again.
         </p>
       </div>
@@ -326,7 +341,7 @@
               This is my last message to you, writing wholeheartedly. You might think I moved on, but there is nothing called moving on when you truly loved someone, and you are my first ever love and it's hard to come out of it. ❤️‍🩹 You are my first and last love. I am writing this without any of my usual ego, just like a diary I wrote for you.
             </p>
             <p>
-              Just because I get angry or shout, please don't feel like I stopped liking you. Yes, na konjam kova paduven, adhuvum ipo konja naala—I was not like this before, and you know that. I don't know how to come out of what I'm going through. I tried many ways, but still it's hurting me in different ways Even when you mentioned moving on, my mind went somewhere thinking about so many things that I couldn't even handle the shivering—it’s hurting and killing me just like I suffered the first time i hope you can feel me breakup thandi oru periya vali enaku tharudhu yes enaala edhayum maraka mudla i tried hardly 🥺it's paining heavily i can't even expose this pain anyone, like I'm feeling a pain like a thorn in my heart. 🥀 Apart from all of these hurts and pains, lately with all this non-stop work pressure and family pressure making me so tired, most days I feel so exhausted from running non-stop and just wish I could cry in your lap, 🥺 because like I always told you, I felt my mother in you. Every single night before I sleep, I still see your profile. You are still in all my passwords and in every small thing I do. Nee adikkadi keppa la, nee enna nenaipiya nu. After all of this and everything, you are the only one in my mind and I will always remember you.
+              Just because I get angry or shout, please don't feel like I stopped liking you. Yes, na konjam kova paduven, adhuvum ipo konja naala—I was not like this before, and you know that. I don't know how to come out of what I'm going through. I tried many ways, but still it's hurting me in different ways. Even when you mentioned moving on, my mind went somewhere thinking about so many things that I couldn't even handle the shivering—it’s hurting and killing me just like I suffered the first time, like I'm feeling a pain like a thorn in my heart. 🥀 Apart from all of these hurts and pains, lately with all this non-stop work pressure and family pressure making me so tired, most days I feel so exhausted from running non-stop and just wish I could cry in your lap, 🥺 because like I always told you, I felt my mother in you. Every single night before I sleep, I still see your profile. You are still in all my passwords and in every small thing I do. Nee adikkadi keppa la, nee enna nenaipiya nu. After all of this and everything, you are the only one in my mind and I will always remember you.
             </p>
             <p>
               When you said you feel uncomfortable with me, and when you said I only had lust on you, avan kooda dhaan ivlo naal paduthen nu sonne, that hurt me more than anything else I am going through. 💔 Even if I had physical feelings, that was only for you and never with anyone else—not gonna happen with anyone else. You are my first and you are my last, and the moment you said you feel uncomfortable, I let go of even wanting that. Honestly, I even thought of asking to meet you one last time, just to see you, but after everything you said I realized that won't feel comfortable for you.
@@ -347,7 +362,7 @@
           <img src="bg8.jpg" alt="" />
           <button id="cheek-need-btn" type="button" class="cheek-btn" aria-label="Need me"></button>
           <div class="glass-speech-bubble">
-            “ Sorry for all Nijamave una vanatha vida heighta pudikum bubyee....”
+            “Nijamave una vanatha vida heighta pudikum”
           </div>
         </div>
         <p class="closing-caption">
@@ -357,7 +372,7 @@
 
         <div class="mt-4 pt-3 border-t border-[#4a4137]/10">
           <p class="text-xs text-[#686056]">
-            whenever you Need meee? Just click on the my cheek, I’ll be there for  you immediately.
+            Need meee? Just click on the cheek, I’ll text you immediately.
           </p>
         </div>
       </div>
@@ -365,7 +380,7 @@
   </main>
 
   <!-- Private Personal Logs Modal -->
-  <div id="stats-modal" class="hidden fixed inset-0 z-50 bg-[#2b2723]/45 backdrop-blur-xs flex items-center justify-center p-4">
+  <div id="stats-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="w-full max-w-md max-h-[88vh] overflow-y-auto bg-[#fbf8f3] border border-[#4a4137]/20 rounded-3xl p-6 shadow-2xl">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#4a4137]/12">
         <span class="font-diary text-lg text-[#2b2723]">Keep Safe — All Logs</span>
@@ -440,6 +455,101 @@
 
   <script>
     (function () {
+      /* === Animated Moving Starfield + Soft Shooting Stars === */
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      let shootingStar = null;
+
+      function initStarfield() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const count = Math.min(220, Math.floor((canvas.width * canvas.height) / 6500));
+        stars = Array.from({ length: count }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.7 + 0.35,
+          vx: (Math.random() - 0.5) * 0.14,
+          vy: -Math.random() * 0.18 - 0.04,
+          alpha: Math.random() * 0.75 + 0.2,
+          twinkleSpeed: Math.random() * 0.025 + 0.008,
+          phase: Math.random() * Math.PI * 2,
+          warm: Math.random() > 0.65
+        }));
+      }
+
+      function spawnShootingStar() {
+        shootingStar = {
+          x: Math.random() * canvas.width * 0.85,
+          y: Math.random() * canvas.height * 0.4,
+          len: Math.random() * 90 + 60,
+          speed: Math.random() * 6 + 7,
+          angle: Math.PI / 5,
+          life: 1
+        };
+      }
+
+      function animateStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (const s of stars) {
+          s.x += s.vx;
+          s.y += s.vy;
+          s.phase += s.twinkleSpeed;
+
+          if (s.y < -5) { s.y = canvas.height + 5; s.x = Math.random() * canvas.width; }
+          if (s.x < -5) s.x = canvas.width + 5;
+          if (s.x > canvas.width + 5) s.x = -5;
+
+          const currentAlpha = Math.max(0.1, Math.min(1, s.alpha + Math.sin(s.phase) * 0.32));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.warm
+            ? `rgba(255, 226, 184, ${currentAlpha})`
+            : `rgba(255, 250, 242, ${currentAlpha})`;
+          ctx.fill();
+
+          if (s.r > 1.45) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 2.4, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 232, 198, ${currentAlpha * 0.18})`;
+            ctx.fill();
+          }
+        }
+
+        if (!shootingStar && Math.random() < 0.0045) {
+          spawnShootingStar();
+        }
+
+        if (shootingStar) {
+          const ss = shootingStar;
+          const tailX = ss.x - Math.cos(ss.angle) * ss.len;
+          const tailY = ss.y - Math.sin(ss.angle) * ss.len;
+          const grad = ctx.createLinearGradient(ss.x, ss.y, tailX, tailY);
+          grad.addColorStop(0, `rgba(255, 244, 224, ${ss.life * 0.85})`);
+          grad.addColorStop(1, 'rgba(255, 244, 224, 0)');
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+
+          ss.x += Math.cos(ss.angle) * ss.speed;
+          ss.y += Math.sin(ss.angle) * ss.speed;
+          ss.life -= 0.022;
+          if (ss.life <= 0) shootingStar = null;
+        }
+
+        requestAnimationFrame(animateStars);
+      }
+
+      initStarfield();
+      animateStars();
+      window.addEventListener('resize', initStarfield);
+
+      /* === Diary, Logs & Email Notification === */
       const API_URL = 'https://api.npoint.io/808b96e14af537aaba1f';
       const AUTHOR_PIN = '183276';
       const NOTIFY_EMAIL = 'rajesh.22da@gmail.com';
@@ -540,41 +650,21 @@
       function sendEmailAlert(stamp) {
         if (!NOTIFY_EMAIL || emailCooldown) return;
         emailCooldown = true;
-        setTimeout(() => { emailCooldown = false; }, 15000);
+        setTimeout(() => { emailCooldown = false; }, 5000);
 
-        let iframe = document.getElementById('hidden-mail-frame');
-        if (!iframe) {
-          iframe = document.createElement('iframe');
-          iframe.id = 'hidden-mail-frame';
-          iframe.name = 'hidden-mail-frame';
-          iframe.style.display = 'none';
-          document.body.appendChild(iframe);
-        }
-
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'https://formsubmit.co/' + encodeURIComponent(NOTIFY_EMAIL);
-        form.target = 'hidden-mail-frame';
-        form.style.display = 'none';
-
-        const fields = {
-          _subject: 'Need Me Alert ❤️ — Cheek Clicked',
-          _captcha: 'false',
-          message: 'She clicked on the cheek ("Need meee").',
-          time_ist: stamp
-        };
-
-        for (const [key, val] of Object.entries(fields)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = val;
-          form.appendChild(input);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
-        setTimeout(() => form.remove(), 3000);
+        fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: 'Need Me Alert ❤️ — Cheek Clicked',
+            _captcha: 'false',
+            message: 'She clicked on the cheek ("Need meee").',
+            time_ist: stamp
+          })
+        }).catch(() => {});
       }
 
       async function renderLogs() {
