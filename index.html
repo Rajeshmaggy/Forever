@@ -118,7 +118,7 @@
     }
     .closing-photo-wrap {
       position: relative;
-      max-width: 460px;
+      max-width: 440px;
       margin: 0 auto;
     }
     .closing-photo img {
@@ -132,39 +132,62 @@
       background: #efe7da;
     }
 
-    /* Natural warm speech bubble */
-    .photo-speech-bubble {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 0.85rem;
-      padding: 0.6rem 1.05rem;
-      background: #fffdf9;
-      color: #2b2723;
+    /* Frosted Glass Chat Bubble with Transparent BG */
+    .glass-speech-bubble {
+      position: absolute;
+      top: 56%;
+      right: -10px;
+      transform: translateY(-50%);
+      max-width: 215px;
+      padding: 0.65rem 0.9rem;
+      background: rgba(255, 253, 249, 0.34);
+      backdrop-filter: blur(10px) saturate(135%);
+      -webkit-backdrop-filter: blur(10px) saturate(135%);
+      color: #1c1815;
+      text-shadow: 0 1px 8px rgba(255, 255, 255, 0.85);
       font-family: 'Newsreader', Georgia, serif;
       font-style: italic;
-      font-size: 1.05rem;
-      line-height: 1.4;
+      font-size: 0.96rem;
+      line-height: 1.38;
+      text-align: left;
       border-radius: 1.15rem;
-      border: 1px solid rgba(74, 65, 55, 0.18);
-      box-shadow: 0 8px 20px -8px rgba(43, 39, 35, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      box-shadow:
+        0 10px 28px -6px rgba(43, 39, 35, 0.22),
+        inset 0 1px 1px rgba(255, 255, 255, 0.75);
+      z-index: 10;
       animation: floatGentle 4.5s ease-in-out infinite;
     }
-    .photo-speech-bubble::after {
+
+    /* Pointer tail aimed left toward mouth */
+    .glass-speech-bubble::before {
       content: '';
       position: absolute;
-      bottom: -7px;
-      left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 12px;
-      height: 12px;
-      background: #fffdf9;
-      border-right: 1px solid rgba(74, 65, 55, 0.18);
-      border-bottom: 1px solid rgba(74, 65, 55, 0.18);
+      left: -6px;
+      top: 44%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 11px;
+      height: 11px;
+      background: rgba(255, 253, 249, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(255, 255, 255, 0.65);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+    }
+
+    @media (max-width: 520px) {
+      .glass-speech-bubble {
+        top: 63%;
+        right: 6px;
+        max-width: 185px;
+        font-size: 0.88rem;
+        padding: 0.55rem 0.75rem;
+      }
     }
 
     @keyframes floatGentle {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
+      0%, 100% { transform: translateY(-50%); }
+      50% { transform: translateY(calc(-50% - 3px)); }
     }
 
     .closing-caption {
@@ -247,9 +270,7 @@
 
     <section id="password-gate" class="fade-view fade-visible min-h-[74vh] flex items-center justify-center">
       <div class="w-full max-w-md bg-[#fbf8f3]/95 border border-[#4a4137]/15 rounded-3xl p-6 sm:p-8 shadow-[0_14px_40px_-15px_rgba(43,39,35,0.12)]">
-        <h1 class="font-diary text-2xl sm:text-3xl text-[#2b2723] leading-snug mb-2">
-          A quiet note left for you
-        </h1>
+        
         <p class="text-sm text-[#686056] mb-2 leading-relaxed">
           Click on the password.
         </p>
@@ -292,7 +313,7 @@
               When you said you feel uncomfortable with me, and when you said I only had lust on you, avan kooda dhaan ivlo naal paduthen nu sonne, that hurt me more than anything else I am going through. 💔 Even if I had physical feelings, that was only for you and never with anyone else—not gonna happen with anyone else. You are my first and you are my last, and the moment you said you feel uncomfortable, I let go of even wanting that. Honestly, I even thought of asking to meet you one last time, just to see you, but after everything you said I realized that won't feel comfortable for you.
             </p>
             <p>
-              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily? And you know one thing, I'm working in IT—enaku tatkal book panna theriyadha? I wanted to talk to you, adhuku dhaan apdi vandhen. Inimey apdi kooda varamaaten. I feel like I told you already, one day you will start hating me—that happened lol.
+              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily?I feel like I told you already, one day you will start hating me—that happened lol.
             </p>
             <p>
               I am not bad person, na romba mosamaanavan la illa. I just wanted to drop my ego one last time and tell you what you mean to me. If there is a next life, I wish I will reach you soon and take you soon—I want to spend my entire life with you. Take care of yourself, and as I used to say always, don't trust anyone—I know you are brave, but think before taking any decision. Have a fresh, happy year ahead. I am not sending this to disturb you or ruin your peace. Thanks for everything you gave me and every memory. I am vacating Hyderabad completely and permanently changing my location to rebuild myself and find the parts of myself I lost.
@@ -301,13 +322,13 @@
         </div>
       </div>
 
-      <!-- Closing photo with natural speech bubble -->
+      <!-- Closing photo with Frosted Glass Speech Bubble -->
       <div class="closing-photo mt-6">
-        <div class="photo-speech-bubble">
-          “Sorry, na edhum venumnu panla...”
-        </div>
         <div class="closing-photo-wrap">
           <img src="bg8.jpg" alt="" />
+          <div class="glass-speech-bubble">
+            “Nijamave una vanatha vida heighta pudikum”
+          </div>
         </div>
         <p class="closing-caption">
           You’re loved unconditionally<br />
