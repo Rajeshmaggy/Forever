@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Quiet Note</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-base: #f5f1ea;
+      --text-primary: #2b2723;
+      --wm-opacity: 0.46;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(226, 213, 193, 0.45) 0%, transparent 52%),
+        radial-gradient(circle at 85% 88%, rgba(213, 200, 182, 0.4) 0%, transparent 55%),
+        var(--bg-base);
+      color: var(--text-primary);
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-diary { font-family: 'Newsreader', Georgia, serif; }
+
+    .fade-view {
+      transition: opacity 0.65s ease, transform 0.65s ease, visibility 0.65s ease;
+    }
+    .fade-hidden {
+      opacity: 0;
+      transform: translateY(12px);
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .fade-visible {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .shake-gentle { animation: gentleShake 0.38s ease; }
+
+    .memory-sheet {
+      position: relative;
+      overflow: hidden;
+      background: #fbf8f3;
+      border: 1px solid rgba(74, 65, 55, 0.15);
+      box-shadow: 0 16px 48px -18px rgba(43, 39, 35, 0.14);
+    }
+
+    #paper-memories {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .wm-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.4s ease;
+      filter: saturate(1) contrast(1.02);
+    }
+    .wm-slide.visible { opacity: var(--wm-opacity); }
+
+    @keyframes kenA {
+      from { transform: scale(1.04); }
+      to   { transform: scale(1.12); }
+    }
+    @keyframes kenB {
+      from { transform: scale(1.06) translate(1%, 0); }
+      to   { transform: scale(1.14) translate(-1%, 1%); }
+    }
+    .wm-slide.ken-a { animation: kenA 11s ease-in-out forwards; }
+    .wm-slide.ken-b { animation: kenB 11s ease-in-out forwards; }
+
+    .paper-wash {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(251,248,243,0.52) 0%, rgba(251,248,243,0.38) 45%, rgba(251,248,243,0.48) 100%);
+    }
+
+    .letter-content { position: relative; z-index: 2; }
+
+    /* Clear closing block — not faded by watermarks */
+    .closing-photo {
+      position: relative;
+      z-index: 5;
+      margin-top: 2.5rem;
+      padding: 1.25rem 1rem 1.5rem;
+      text-align: center;
+      background: #fbf8f3;
+      border-radius: 1.35rem;
+      border: 1px solid rgba(74, 65, 55, 0.16);
+      box-shadow: 0 10px 28px -14px rgba(43, 39, 35, 0.18);
+    }
+    .closing-photo img {
+      display: block;
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      min-height: 220px;
+      margin: 0 auto;
+      object-fit: cover;
+      border-radius: 1rem;
+      border: 1px solid rgba(74, 65, 55, 0.12);
+      background: #efe7da;
+    }
+    .closing-caption {
+      margin: 1.1rem 0 0;
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: #2b2723;
+      font-weight: 400;
+    }
+
+    .unlock-frame {
+      position: relative;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(74, 65, 55, 0.18);
+      background: #efe7da;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .unlock-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 420px;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .hotspot-hint {
+      position: absolute;
+      border: 2px dashed rgba(122, 92, 71, 0.85);
+      border-radius: 9999px;
+      pointer-events: none;
+      display: none;
+    }
+
+    .memory-dot-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: #8c6b52;
+      animation: softPulse 5s ease-in-out infinite;
+    }
+    @keyframes softPulse {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 0.95; }
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(122, 92, 71, 0.25);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="selection:bg-[#e6d8c5] selection:text-[#2b2723]">
+
+  <header class="relative z-20 w-full max-w-4xl mx-auto px-5 pt-5 pb-2 flex items-center justify-between">
+    <div class="flex items-center gap-2 text-xs tracking-wide uppercase text-[#7a7064]">
+      <span class="memory-dot-pulse"></span>
+      <span>Private Journal</span>
+    </div>
+    <button id="lock-now-btn" type="button"
+      class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#686056] hover:text-[#2b2723] bg-[#fbf8f3]/75 border border-[#4a4137]/15 transition cursor-pointer">
+      Lock
+    </button>
+  </header>
+
+  <main class="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6 pt-4 pb-20">
+
+    <section id="password-gate" class="fade-view fade-visible min-h-[74vh] flex items-center justify-center">
+      <div class="w-full max-w-md bg-[#fbf8f3]/95 border border-[#4a4137]/15 rounded-3xl p-6 sm:p-8 shadow-[0_14px_40px_-15px_rgba(43,39,35,0.12)]">
+        <h1 class="font-diary text-2xl sm:text-3xl text-[#2b2723] leading-snug mb-2">
+          A quiet note left for you
+        </h1>
+        <p class="text-sm text-[#686056] mb-2 leading-relaxed">
+          Click on the password.
+        </p>
+        <p class="text-sm text-[#8c8276] mb-5 leading-relaxed">
+          You know where to click.
+        </p>
+
+        <div id="unlock-frame" class="unlock-frame" title="Click on the password">
+          <img id="unlock-image" src="bg5.jpg" alt="" draggable="false" />
+          <div id="hotspot-hint" class="hotspot-hint"></div>
+        </div>
+
+        <p id="unlock-error" class="hidden mt-3 text-xs text-[#9e473b]" role="alert">
+          Not there… try again.
+        </p>
+      </div>
+    </section>
+
+    <article id="letter-view" class="fade-view fade-hidden hidden" aria-label="Diary Letter">
+      <div class="memory-sheet rounded-3xl px-6 py-9 sm:px-12 sm:py-14">
+        <div id="paper-memories" aria-hidden="true">
+          <div id="wm-slide-a" class="wm-slide"></div>
+          <div id="wm-slide-b" class="wm-slide"></div>
+        </div>
+        <div class="paper-wash"></div>
+
+        <div class="letter-content">
+          <div class="pb-7 mb-8 border-b border-[#4a4137]/12">
+            <span class="font-diary italic text-lg text-[#4a4137]">Written from the heart</span>
+          </div>
+
+          <div class="font-diary text-[18px] sm:text-[20px] leading-[1.88] text-[#1f1c19] space-y-7">
+            <p>
+              This is my last message to you, writing wholeheartedly. You might think I moved on, but there is nothing called moving on when you truly loved someone, and you are my first ever love and it's hard to come out of it. ❤️‍🩹 You are my first and last love. I am writing this without any of my usual ego, just like a diary I wrote for you.
+            </p>
+            <p>
+              Just because I get angry or shout, please don't feel like I stopped liking you. Yes, na konjam kova paduven, adhuvum ipo konja naala—I was not like this before, and you know that. I don't know how to come out of what I'm going through. I tried many ways, but still it's hurting me in different ways, like I'm feeling a pain like a thorn in my heart. 🥀 Apart from all of these hurts and pains, lately with all this non-stop work pressure and family pressure making me so tired, most days I feel so exhausted from running non-stop and just wish I could cry in your lap, 🥺 because like I always told you, I felt my mother in you. Every single night before I sleep, I still see your profile. You are still in all my passwords and in every small thing I do. Nee adikkadi keppa la, nee enna nenaipiya nu. After all of this and everything, you are the only one in my mind and I will always remember you.
+            </p>
+            <p>
+              When you said you feel uncomfortable with me, and when you said I only had lust on you, avan kooda dhaan ivlo naal paduthen nu sonne, that hurt me more than anything else I am going through. 💔 Even if I had physical feelings, that was only for you and never with anyone else—not gonna happen with anyone else. You are my first and you are my last, and the moment you said you feel uncomfortable, I let go of even wanting that. Honestly, I even thought of asking to meet you one last time, just to see you, but after everything you said I realized that won't feel comfortable for you.
+            </p>
+            <p>
+              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily? And you know one thing, I'm working in IT—enaku tatkal book panna theriyadha? I wanted to talk to you, adhuku dhaan apdi vandhen. Inimey apdi kooda varamaaten. I feel like I told you already, one day you will start hating me—that happened lol.
+            </p>
+            <p>
+              I am not bad person, na romba mosamaanavan la illa. I just wanted to drop my ego one last time and tell you what you mean to me. If there is a next life, I wish I will reach you soon and take you soon—I want to spend my entire life with you. Take care of yourself, and as I used to say always, don't trust anyone—I know you are brave, but think before taking any decision. Have a fresh, happy year ahead. I am not sending this to disturb you or ruin your peace. Thanks for everything you gave me and every memory. I am vacating Hyderabad completely and permanently changing my location to rebuild myself and find the parts of myself I lost.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outside the faded paper so photo + caption are fully visible -->
+      <div class="closing-photo mt-6">
+        <img src="bg8.jpg" alt="" />
+        <p class="closing-caption">
+          You’re loved unconditionally<br />
+          and missed unconditionally Taataa Muu!
+          
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    (function () {
+      const HOTSPOT = { x: 0.56, y: 0.61, r: 0.03 };
+      const SHOW_HOTSPOT_HINT = true; // set false before sharing
+
+      const MEMORY_IMAGES = [
+        'bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg',
+        'bg5.jpg', 'bg6.jpg', 'bg7.jpg', 'bg8.jpg'
+      ];
+      const SLIDE_MS = 5000;
+
+      const passwordGate = document.getElementById('password-gate');
+      const letterView = document.getElementById('letter-view');
+      const unlockFrame = document.getElementById('unlock-frame');
+      const unlockImage = document.getElementById('unlock-image');
+      const unlockError = document.getElementById('unlock-error');
+      const hotspotHint = document.getElementById('hotspot-hint');
+      const lockNowBtn = document.getElementById('lock-now-btn');
+      const slideA = document.getElementById('wm-slide-a');
+      const slideB = document.getElementById('wm-slide-b');
+
+      let slideIndex = 0;
+      let usingA = true;
+      let timer = null;
+
+      function placeHotspotHint() {
+        if (!SHOW_HOTSPOT_HINT) {
+          hotspotHint.style.display = 'none';
+          return;
+        }
+        const w = unlockFrame.clientWidth;
+        const h = unlockFrame.clientHeight;
+        if (!w || !h) return;
+        const size = HOTSPOT.r * 2 * w;
+        hotspotHint.style.display = 'block';
+        hotspotHint.style.width = size + 'px';
+        hotspotHint.style.height = size + 'px';
+        hotspotHint.style.left = (HOTSPOT.x * w - size / 2) + 'px';
+        hotspotHint.style.top = (HOTSPOT.y * h - size / 2) + 'px';
+      }
+
+      function isInsideHotspot(clientX, clientY) {
+        const rect = unlockFrame.getBoundingClientRect();
+        const px = (clientX - rect.left) / rect.width;
+        const py = (clientY - rect.top) / rect.height;
+        const dx = px - HOTSPOT.x;
+        const dy = py - HOTSPOT.y;
+        const rx = HOTSPOT.r;
+        const ry = HOTSPOT.r * (rect.width / Math.max(rect.height, 1));
+        return (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) <= 1;
+      }
+
+      function showSlide(index) {
+        const src = 'url("' + MEMORY_IMAGES[index] + '")';
+        const front = usingA ? slideA : slideB;
+        const back = usingA ? slideB : slideA;
+        back.style.backgroundImage = src;
+        back.classList.remove('ken-a', 'ken-b', 'visible');
+        void back.offsetWidth;
+        back.classList.add(index % 2 === 0 ? 'ken-a' : 'ken-b', 'visible');
+        front.classList.remove('visible');
+        usingA = !usingA;
+        slideIndex = index;
+      }
+
+      function startSlideshow() {
+        stopSlideshow();
+        showSlide(0);
+        timer = setInterval(() => {
+          showSlide((slideIndex + 1) % MEMORY_IMAGES.length);
+        }, SLIDE_MS);
+      }
+
+      function stopSlideshow() {
+        if (timer) clearInterval(timer);
+        timer = null;
+        slideA.classList.remove('visible', 'ken-a', 'ken-b');
+        slideB.classList.remove('visible', 'ken-a', 'ken-b');
+      }
+
+      function unlockLetter() {
+        unlockError.classList.add('hidden');
+        passwordGate.classList.remove('fade-visible');
+        passwordGate.classList.add('fade-hidden');
+
+        setTimeout(() => {
+          passwordGate.classList.add('hidden');
+          letterView.classList.remove('hidden');
+          lockNowBtn.classList.remove('hidden');
+          lockNowBtn.classList.add('inline-flex');
+          startSlideshow();
+          requestAnimationFrame(() => {
+            letterView.classList.remove('fade-hidden');
+            letterView.classList.add('fade-visible');
+          });
+        }, 280);
+      }
+
+      function lockLetter() {
+        stopSlideshow();
+        letterView.classList.remove('fade-visible');
+        letterView.classList.add('fade-hidden');
+        setTimeout(() => {
+          letterView.classList.add('hidden');
+          lockNowBtn.classList.add('hidden');
+          lockNowBtn.classList.remove('inline-flex');
+          passwordGate.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            passwordGate.classList.remove('fade-hidden');
+            passwordGate.classList.add('fade-visible');
+            placeHotspotHint();
+          });
+        }, 280);
+      }
+
+      unlockFrame.addEventListener('click', function (e) {
+        if (isInsideHotspot(e.clientX, e.clientY)) {
+          unlockLetter();
+        } else {
+          unlockError.classList.remove('hidden');
+          unlockFrame.classList.remove('shake-gentle');
+          void unlockFrame.offsetWidth;
+          unlockFrame.classList.add('shake-gentle');
+        }
+      });
+
+      lockNowBtn.addEventListener('click', lockLetter);
+      unlockImage.addEventListener('load', placeHotspotHint);
+      window.addEventListener('resize', placeHotspotHint);
+
+      MEMORY_IMAGES.forEach((src) => { const i = new Image(); i.src = src; });
+      placeHotspotHint();
+    })();
+  </script>
+</body>
+</html>
