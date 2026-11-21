@@ -132,6 +132,26 @@
       background: #efe7da;
     }
 
+    /* Completely Invisible Cheek Hotspot */
+    .cheek-btn {
+      position: absolute;
+      top: 47%;
+      left: 44%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      height: 350px;
+      border-radius: 9999px;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      z-index: 12;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     /* Frosted Glass Chat Bubble with Transparent BG */
     .glass-speech-bubble {
       position: absolute;
@@ -270,7 +290,6 @@
 
     <section id="password-gate" class="fade-view fade-visible min-h-[74vh] flex items-center justify-center">
       <div class="w-full max-w-md bg-[#fbf8f3]/95 border border-[#4a4137]/15 rounded-3xl p-6 sm:p-8 shadow-[0_14px_40px_-15px_rgba(43,39,35,0.12)]">
-        
         <p class="text-sm text-[#686056] mb-2 leading-relaxed">
           Click on the password.
         </p>
@@ -313,19 +332,20 @@
               When you said you feel uncomfortable with me, and when you said I only had lust on you, avan kooda dhaan ivlo naal paduthen nu sonne, that hurt me more than anything else I am going through. 💔 Even if I had physical feelings, that was only for you and never with anyone else—not gonna happen with anyone else. You are my first and you are my last, and the moment you said you feel uncomfortable, I let go of even wanting that. Honestly, I even thought of asking to meet you one last time, just to see you, but after everything you said I realized that won't feel comfortable for you.
             </p>
             <p>
-              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily?I feel like I told you already, one day you will start hating me—that happened lol.
+              All I want to say is you are loved unconditionally. 🤍 I feel happy that I first ever felt love with you, and I think I have also given some good memories apart from all these anger. I feel like I won't be a bad person to you completely. I'm not sure when I will come out of these hurts and hurting myself by overthinking, but I'm not gonna disturb you anymore via anything. I'm also a human right, how can I come out of all this so easily? I feel like I told you already, one day you will start hating me—that happened lol.
             </p>
             <p>
-              I am not bad person, na romba mosamaanavan la illa. I just wanted to drop my ego one last time and tell you what you mean to me. If there is a next life, I wish I will reach you soon and take you soon—I want to spend my entire life with you. Take care of yourself, and as I used to say always, don't trust anyone—I know you are brave, but think before taking any decision. Have a fresh, happy year ahead. I am not sending this to disturb you or ruin your peace. Thanks for everything you gave me and every memory. I am vacating Hyderabad completely and permanently changing my location to rebuild myself and find the parts of myself I lost.
+              I am not bad person, na romba mosamaanavan la illa. I just wanted to drop my ego one last time and tell you what you mean to me. If there is a next life, I wish I will reach you soon and take you soon—I want to spend my entire life with you and wana grow with you and get old with you. Take care of yourself, and as I used to say always, don't trust anyone—I know you are brave, but think before taking any decision. Have a fresh, happy year ahead. I am not sending this to disturb you or ruin your peace. Thanks for everything you gave me and every memory. I am vacating Hyderabad completely and permanently changing my location to rebuild myself and find the parts of myself I lost. You are always in my heart and near my heart
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Closing photo with Frosted Glass Speech Bubble -->
+      <!-- Closing photo with Frosted Glass Speech Bubble & Invisible Cheek Button -->
       <div class="closing-photo mt-6">
         <div class="closing-photo-wrap">
           <img src="bg8.jpg" alt="" />
+          <button id="cheek-need-btn" type="button" class="cheek-btn" aria-label="Need me"></button>
           <div class="glass-speech-bubble">
             “Nijamave una vanatha vida heighta pudikum”
           </div>
@@ -334,6 +354,12 @@
           You’re loved unconditionally<br />
           and missed unconditionally Taataa Muu!
         </p>
+
+        <div class="mt-4 pt-3 border-t border-[#4a4137]/10">
+          <p class="text-xs text-[#686056]">
+            Need meee? Just click on the cheek, I’ll text you immediately.
+          </p>
+        </div>
       </div>
     </article>
   </main>
@@ -364,27 +390,38 @@
 
       <!-- Logs Screen -->
       <div id="logs-screen" class="hidden space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-3.5 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
-            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Total Page Views</div>
+        <div class="grid grid-cols-3 gap-2.5">
+          <div class="p-3 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
+            <div class="text-[10px] uppercase tracking-wider text-[#7a7064]">Page Views</div>
             <div id="total-views-count" class="font-diary text-2xl text-[#2b2723] mt-0.5">0</div>
           </div>
-          <div class="p-3.5 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
-            <div class="text-[11px] uppercase tracking-wider text-[#7a7064]">Total Unlocks</div>
+          <div class="p-3 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
+            <div class="text-[10px] uppercase tracking-wider text-[#7a7064]">Unlocks</div>
             <div id="total-unlocks-count" class="font-diary text-2xl text-[#2b2723] mt-0.5">0</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-[#f5f1ea] border border-[#4a4137]/12">
+            <div class="text-[10px] uppercase tracking-wider text-[#7a7064]">Need Me</div>
+            <div id="total-needme-count" class="font-diary text-2xl text-[#2b2723] mt-0.5">0</div>
           </div>
         </div>
 
         <div>
+          <div class="text-xs font-medium text-[#4a4137] mb-1.5">Need Me Clicks (IST)</div>
+          <ul id="needme-list" class="max-h-36 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
+            <li class="py-1">Loading...</li>
+          </ul>
+        </div>
+
+        <div>
           <div class="text-xs font-medium text-[#4a4137] mb-1.5">All Page Views (IST)</div>
-          <ul id="views-list" class="max-h-48 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
+          <ul id="views-list" class="max-h-36 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
             <li class="py-1">Loading...</li>
           </ul>
         </div>
 
         <div>
           <div class="text-xs font-medium text-[#4a4137] mb-1.5">All Letter Unlocks (IST)</div>
-          <ul id="unlocks-list" class="max-h-48 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
+          <ul id="unlocks-list" class="max-h-36 overflow-y-auto text-xs text-[#686056] bg-white/90 rounded-xl p-3 border border-[#4a4137]/12 divide-y divide-[#4a4137]/8">
             <li class="py-1">Loading...</li>
           </ul>
         </div>
@@ -405,6 +442,7 @@
     (function () {
       const API_URL = 'https://api.npoint.io/808b96e14af537aaba1f';
       const AUTHOR_PIN = '183276';
+      const NOTIFY_EMAIL = 'rajesh.22da@gmail.com';
 
       const HOTSPOT = { x: 0.56, y: 0.61, r: 0.05 };
       const SHOW_HOTSPOT_HINT = false;
@@ -425,6 +463,8 @@
       const slideA = document.getElementById('wm-slide-a');
       const slideB = document.getElementById('wm-slide-b');
 
+      const cheekNeedBtn = document.getElementById('cheek-need-btn');
+
       const personalVaultBtn = document.getElementById('personal-vault-btn');
       const statsModal = document.getElementById('stats-modal');
       const closeStatsBtn = document.getElementById('close-stats-btn');
@@ -435,8 +475,10 @@
       const pinError = document.getElementById('pin-error');
       const totalViewsCount = document.getElementById('total-views-count');
       const totalUnlocksCount = document.getElementById('total-unlocks-count');
+      const totalNeedmeCount = document.getElementById('total-needme-count');
       const viewsList = document.getElementById('views-list');
       const unlocksList = document.getElementById('unlocks-list');
+      const needmeList = document.getElementById('needme-list');
       const refreshLogsBtn = document.getElementById('refresh-logs-btn');
       const clearLogsBtn = document.getElementById('clear-logs-btn');
 
@@ -444,6 +486,7 @@
       let usingA = true;
       let timer = null;
       let writeQueue = Promise.resolve();
+      let emailCooldown = false;
 
       function getISTTimestamp() {
         return new Date().toLocaleString('en-IN', {
@@ -465,10 +508,11 @@
           const data = await res.json();
           return {
             views: Array.isArray(data.views) ? data.views : [],
-            unlocks: Array.isArray(data.unlocks) ? data.unlocks : []
+            unlocks: Array.isArray(data.unlocks) ? data.unlocks : [],
+            needme: Array.isArray(data.needme) ? data.needme : []
           };
         } catch (e) {
-          return JSON.parse(localStorage.getItem('diary_fallback_logs') || '{"views":[],"unlocks":[]}');
+          return JSON.parse(localStorage.getItem('diary_fallback_logs') || '{"views":[],"unlocks":[],"needme":[]}');
         }
       }
 
@@ -478,6 +522,7 @@
           const data = await fetchLogs();
           if (type === 'view') data.views.push(stamp);
           if (type === 'unlock') data.unlocks.push(stamp);
+          if (type === 'needme') data.needme.push(stamp);
 
           localStorage.setItem('diary_fallback_logs', JSON.stringify(data));
 
@@ -492,14 +537,39 @@
         return writeQueue;
       }
 
+      function sendEmailAlert(stamp) {
+        if (!NOTIFY_EMAIL || emailCooldown) return;
+        emailCooldown = true;
+        setTimeout(() => { emailCooldown = false; }, 15000);
+
+        fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: 'Need Me Alert ❤️ — Cheek Clicked',
+            message: 'She clicked on the cheek ("Need meee").',
+            time_ist: stamp
+          })
+        }).catch(() => {});
+      }
+
       async function renderLogs() {
         viewsList.innerHTML = '<li class="py-1">Loading...</li>';
         unlocksList.innerHTML = '<li class="py-1">Loading...</li>';
+        needmeList.innerHTML = '<li class="py-1">Loading...</li>';
         await writeQueue;
         const data = await fetchLogs();
 
         totalViewsCount.textContent = data.views.length;
         totalUnlocksCount.textContent = data.unlocks.length;
+        totalNeedmeCount.textContent = data.needme.length;
+
+        needmeList.innerHTML = data.needme.length
+          ? data.needme.slice().reverse().map((t, i) => `<li class="py-1.5">#${data.needme.length - i} — ${t}</li>`).join('')
+          : '<li class="py-1 italic text-[#8c8276]">Not clicked yet.</li>';
 
         viewsList.innerHTML = data.views.length
           ? data.views.slice().reverse().map((t, i) => `<li class="py-1.5">#${data.views.length - i} — ${t}</li>`).join('')
@@ -514,6 +584,13 @@
         sessionStorage.setItem('diary_viewed_session', '1');
         recordEvent('view');
       }
+
+      // Silent Cheek Click Event (Logs + Sends Email, zero UI text shown)
+      cheekNeedBtn.addEventListener('click', () => {
+        const stamp = getISTTimestamp();
+        recordEvent('needme');
+        sendEmailAlert(stamp);
+      });
 
       personalVaultBtn.addEventListener('click', () => {
         pinInput.value = '';
@@ -548,7 +625,7 @@
 
       clearLogsBtn.addEventListener('click', () => {
         writeQueue = writeQueue.then(async () => {
-          const emptyData = { views: [], unlocks: [] };
+          const emptyData = { views: [], unlocks: [], needme: [] };
           localStorage.setItem('diary_fallback_logs', JSON.stringify(emptyData));
           try {
             await fetch(API_URL, {
