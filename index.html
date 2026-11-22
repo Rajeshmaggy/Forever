@@ -187,6 +187,7 @@
         inset 0 1px 1px rgba(255, 255, 255, 0.75);
       z-index: 10;
       animation: floatGentle 4.5s ease-in-out infinite;
+      transition: opacity 0.35s ease;
     }
 
     /* Pointer tail aimed left toward mouth */
@@ -361,7 +362,7 @@
         <div class="closing-photo-wrap">
           <img src="bg8.jpg" alt="" />
           <button id="cheek-need-btn" type="button" class="cheek-btn" aria-label="Need me"></button>
-          <div class="glass-speech-bubble">
+          <div id="speech-bubble" class="glass-speech-bubble">
             “Sorry for all..Nijamave una vanatha vida heighta pudikum bubyeee”
           </div>
         </div>
@@ -372,7 +373,7 @@
 
         <div class="mt-4 pt-3 border-t border-[#4a4137]/10">
           <p class="text-xs text-[#686056]">
-           whenever you Need meee, Just click on the cheek, I’ll text you immediately.
+            whenever you Need meee, Just click on the cheek, I’ll text you immediately.
           </p>
         </div>
       </div>
@@ -574,6 +575,9 @@
       const slideB = document.getElementById('wm-slide-b');
 
       const cheekNeedBtn = document.getElementById('cheek-need-btn');
+      const speechBubble = document.getElementById('speech-bubble');
+      const DEFAULT_SPEECH_TEXT = '“Sorry for all..Nijamave una vanatha vida heighta pudikum bubyeee”';
+      const CLICKED_SPEECH_TEXT = '“Enna muu ok dhaana eru varen”';
 
       const personalVaultBtn = document.getElementById('personal-vault-btn');
       const statsModal = document.getElementById('stats-modal');
@@ -700,6 +704,14 @@
         const stamp = getISTTimestamp();
         recordEvent('needme');
         sendEmailAlert(stamp);
+
+        if (speechBubble.textContent.trim() !== CLICKED_SPEECH_TEXT) {
+          speechBubble.style.opacity = '0';
+          setTimeout(() => {
+            speechBubble.textContent = CLICKED_SPEECH_TEXT;
+            speechBubble.style.opacity = '1';
+          }, 220);
+        }
       });
 
       personalVaultBtn.addEventListener('click', () => {
@@ -805,6 +817,8 @@
 
       function unlockLetter() {
         recordEvent('unlock');
+        speechBubble.textContent = DEFAULT_SPEECH_TEXT;
+        speechBubble.style.opacity = '1';
 
         unlockError.classList.add('hidden');
         passwordGate.classList.remove('fade-visible');
